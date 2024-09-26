@@ -26,7 +26,7 @@ jobs:
           token: ${{ secrets.READ_GITHUB_REPOS_TOKEN }}
 
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-github-action@v3.0.0
+        uses: sonarsource/sonarcloud-github-action@v3.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 

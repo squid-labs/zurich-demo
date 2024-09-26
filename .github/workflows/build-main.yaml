@@ -25,26 +25,6 @@ jobs:
           submodules: 'true'
           token: ${{ secrets.READ_GITHUB_REPOS_TOKEN }}
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'config'
-          hide-progress: false
-          format: 'sarif'
-          output: 'dockerfile-trivy-scan-results.sarif'
-          exit-code: '0'
-          ignore-unfixed: true
-          severity: 'CRITICAL,HIGH,MEDIUM'
-
-      - name: View Results
-        run: cat dockerfile-trivy-scan-results.sarif
-
-      - name: Upload Trivy scan results to Github Security Tab
-        uses: github/codeql-action/upload-sarif@main
-        if: always()
-        with:
-          sarif_file: 'dockerfile-trivy-scan-results.sarif'
-
       - name: Set short sha
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT

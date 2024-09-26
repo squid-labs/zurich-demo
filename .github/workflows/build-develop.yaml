@@ -1,9 +1,9 @@
-name: Build (Main)
+name: Build (develop)
 
 on:
   push:
     branches:
-      - main
+      - develop
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -45,6 +45,6 @@ jobs:
 
       - name: Tag and publish container image
         run: |
-          docker tag docker.io/library/nodejs-server ${{ vars.ECR_NON_PROD_SHARED_URL }}/nodejs-server:PROD-$(git rev-parse --short HEAD)
-          docker push ${{ vars.ECR_NON_PROD_SHARED_URL }}/nodejs-server:PROD-$(git rev-parse --short HEAD)
+          docker tag docker.io/library/nodejs-server ${{ vars.ECR_NON_PROD_SHARED_URL }}/nodejs-server:$(git rev-parse --short HEAD)
+          docker push ${{ vars.ECR_NON_PROD_SHARED_URL }}/nodejs-server:$(git rev-parse --short HEAD)
 

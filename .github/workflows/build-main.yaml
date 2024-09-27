@@ -48,3 +48,16 @@ jobs:
           docker tag docker.io/library/nodejs-server ${{ vars.ECR_NON_PROD_SHARED_URL }}/nodejs-server:PROD-$(git rev-parse --short HEAD)
           docker push ${{ vars.ECR_NON_PROD_SHARED_URL }}/nodejs-server:PROD-$(git rev-parse --short HEAD)
 
+      - name: Scan Docker image 🐳
+        uses: snyk/actions/docker@master
+        continue-on-error: true
+        with:
+          image: ${{ vars.ECR_NON_PROD_SHARED_URL }}/nodejs-server:PROD-$(git rev-parse --short HEAD)
+          args: --file=Dockerfile --severity-threshold=high --sarif-file-output=snyk.sarif
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Upload Snyk report as sarif 📦
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: snyk.sarif
